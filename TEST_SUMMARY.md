@@ -38,10 +38,10 @@
 ### 3. ✅ Wrong Bible IDs
 **Problem:** Using incorrect/inaccessible Bible IDs from documentation  
 **Solution:** Updated to working Bible IDs:
-- English (ASV): `06125adad2d5898a-01` - Default
+- English (BSB): `bba9f40183526463-01` - Default (Berean Standard Bible, 2016)
 - German (Elberfelder): `f492a38d0e52db0f-01` - Default
+- ASV: `06125adad2d5898a-01`
 - KJV: `de4e12af7f28f599-02`
-- BSB: `bba9f40183526463-01`
 
 ### 4. ✅ Improved Error Messages
 **Problem:** Generic error messages  
@@ -110,24 +110,24 @@ python bible_bot.py
 ## Supported Features
 
 ### ✅ Commands
-- `!bible Gen 1:1` - English verses
-- `!bibel 1. Mose 1,1` - German verses
-- `!bible KJV Gen 1:1` - Specific translation
-- `!bible list` - List available English translations
-- `!bibel list` - List available German translations
+- `/bible reference:Gen 1:1` - English verses
+- `/bibel reference:1.Mose 1,1` - German verses
+- `/bible reference:Gen 1:1 translation:KJV` - Specific translation
+- `/bible-list` - List available English translations
+- `/bibel-list` - List available German translations
 
 ### ✅ Reference Formats
 - Single verses: `Gen 1:1`
 - Verse ranges: `Gen 1:1-3`
 - Chapter ranges: `Matt 5:3-7:12`
-- German format: `1. Mose 5,14`
+- German format: `1.Mose 5,14` or `1. Mose 5,14` (with or without space!)
 - Comma or colon separators
 
 ### ✅ Translations
-- ASV (American Standard Version) - Default English
-- Elberfelder Translation (ELBBK) - Default German
+- BSB (Berean Standard Bible, 2016) - Default English ⭐
+- Elberfelder Translation - Default German
 - KJV (King James Version)
-- BSB (Berean Standard Bible)
+- ASV (American Standard Version)
 - CEV, FBV, LSV
 
 ### ✅ Languages

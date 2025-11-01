@@ -10,7 +10,7 @@ The bot uses Discord's native slash command system for the best user experience!
 ```
 /bible reference:Gen 1:1
 ```
-Fetches Genesis 1:1 in English (default: ASV)
+Fetches Genesis 1:1 in English (default: BSB)
 
 #### German (/bibel)
 ```

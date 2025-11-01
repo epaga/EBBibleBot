@@ -224,7 +224,7 @@ TRANSLATION_MAPPINGS = {
     'GERMAN': 'f492a38d0e52db0f-01',
     
     # Default fallbacks
-    'DEFAULT_ENGLISH': '06125adad2d5898a-01',  # ASV
+    'DEFAULT_ENGLISH': 'bba9f40183526463-01',  # BSB
     'DEFAULT_GERMAN': 'f492a38d0e52db0f-01',   # German Bible
 }
 

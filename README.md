@@ -1,38 +1,39 @@
 # Discord Bible Bot
 
-A (vibe-coded) Discord bot that responds to Bible verse requests in both English and German, supporting various reference formats and translations.
+A (vibe-coded) Discord bot that responds to Bible verse requests in both English and German, using native Discord slash commands.
 
 ## Features
 
-- 📖 Responds to `!bible` and `!bibel` commands
+- 📖 Native Discord slash commands: `/bible` and `/bibel`
 - 🌍 Supports both English and German Bible book names and reference formats
 - 📚 Multiple Bible translations available
 - 🔄 Handles various abbreviations and book name formats
 - 🎯 Supports verse ranges (e.g., Gen 1:1-5)
+- ✅ Auto-complete and parameter hints in Discord
 
 ## Supported Reference Formats
 
 ### English Format
 ```
-!bible Gen 1:1
-!bible Genesis 1:1
-!bible Gen 1:1-5
-!bible Matthew 5:3-7:12
+/bible reference:Gen 1:1
+/bible reference:Genesis 1:1
+/bible reference:Gen 1:1-5
+/bible reference:Matthew 5:3-7:12
 ```
 
 ### German Format
 ```
-!bibel 1. Mose 5,14
-!bibel 1 Mose 5,14
-!bibel Johannes 3,16
-!bibel Römer 8,28
+/bibel reference:1.Mose 1,1
+/bibel reference:1. Mose 5,14
+/bibel reference:Johannes 3,16
+/bibel reference:Römer 8,28
 ```
 
 ### With Translation
 ```
-!bible KJV Gen 1:1
-!bible ESV John 3:16
-!bibel Luther 1. Mose 1,1
+/bible reference:Gen 1:1 translation:KJV
+/bible reference:John 3:16 translation:BSB
+/bibel reference:1.Mose 1,1 translation:Elberfelder
 ```
 
 ## Installation
@@ -100,8 +101,8 @@ pip install -r requirements.txt
    BIBLE_API_KEY=your_bible_api_key_here
    
    # Optional: Customize default translations
-   DEFAULT_GERMAN_TRANSLATION=de4e12af7f28f599-02
-   DEFAULT_ENGLISH_TRANSLATION=de4e12af7f28f599-01
+   DEFAULT_GERMAN_TRANSLATION=f492a38d0e52db0f-01
+   DEFAULT_ENGLISH_TRANSLATION=bba9f40183526463-01
    ```
 
    Replace `your_discord_bot_token_here` and `your_bible_api_key_here` with the actual tokens you copied.
@@ -113,6 +114,7 @@ pip install -r requirements.txt
 3. In the left sidebar, click **"OAuth2"** → **"URL Generator"**
 4. Under **"Scopes"**, check:
    - ✅ `bot`
+   - ✅ `applications.commands` (required for slash commands)
 5. Under **"Bot Permissions"**, check:
    - ✅ Send Messages
    - ✅ Read Messages/View Channels
@@ -134,15 +136,17 @@ Starting Discord Bible Bot...
 Press Ctrl+C to stop the bot
 Bot logged in as YourBotName#1234
 Connected to 1 server(s)
-Ready to respond to Bible commands!
+Ready to respond to Bible slash commands!
 ```
 
 ### Step 7: Test the Bot
 
-Go to your Discord server and try:
+Go to your Discord server and type `/` to see the slash commands. Try:
 ```
-!bible Gen 1:1
-!bibel 1. Mose 5,14
+/bible reference:Gen 1:1
+/bibel reference:1.Mose 1,1
+/bible-list
+/bibel-list
 ```
 
 ## Running the Bot Continuously on Mac mini
@@ -263,9 +267,10 @@ Update the Bible IDs in your `.env` file or in `bible_api.py` as needed.
 
 ### Bot doesn't respond to commands
 
-1. **Check Message Content Intent**: Make sure you enabled "Message Content Intent" in the Discord Developer Portal
+1. **Check slash command permissions**: Make sure you enabled `applications.commands` scope when inviting the bot
 2. **Check permissions**: Ensure the bot has "Send Messages" and "Read Messages" permissions in your server
 3. **Check the logs**: Look for error messages in the console
+4. **Wait for commands to sync**: Slash commands may take a few minutes to appear after first starting the bot
 
 ### "Invalid API key" error
 

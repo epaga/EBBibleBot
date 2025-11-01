@@ -1,5 +1,5 @@
 """
-Discord Bible Bot - Responds to !bible and !bibel commands with Bible verses.
+Discord Bible Bot - Responds to /bible and /bibel slash commands with Bible verses.
 """
 
 import os
@@ -75,7 +75,7 @@ def get_translations_list( language='English' ):
         lines.append( f"• **{abbrev}** - {name}" )
     
     if len( filtered ) > 15:
-        lines.append( f"\n_...and {len( filtered ) - 15} more. Use `!bible <CODE> Gen 1:1` to try a translation._" )
+        lines.append( f"\n_...and {len( filtered ) - 15} more. Use `/bible reference:Gen 1:1 translation:<CODE>` to try a translation._" )
     
     return "\n".join( lines )
 

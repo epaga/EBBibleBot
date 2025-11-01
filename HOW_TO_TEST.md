@@ -11,9 +11,9 @@ python test_components.py
 
 This will test:
 - ✅ Reference parsing (English and German)
-- ✅ Command extraction (!bible and !bibel)
 - ✅ Book name normalization
 - ✅ API formatting
+- ✅ Command extraction (legacy text commands)
 
 **Expected output:** All tests should pass with green checkmarks ✅
 
@@ -43,7 +43,7 @@ Test the bot interactively without needing Discord:
 python test_manual.py
 ```
 
-Then type commands like:
+Then type commands like (legacy text format for testing):
 - `!bible Gen 1:1`
 - `!bibel 1. Mose 5,14`
 - `!bible KJV John 3:16`
@@ -64,12 +64,12 @@ Once all the above tests pass, start your bot:
 python bible_bot.py
 ```
 
-Then test in Discord:
-- `!bible Gen 1:1` (ASV by default)
-- `!bibel 1. Mose 5,14` (Elberfelder by default)
-- `!bible KJV John 3:16` (specific translation)
-- `!bible list` (see available English translations)
-- `!bibel list` (see available German translations)
+Then test in Discord using slash commands:
+- `/bible reference:Gen 1:1` (BSB by default)
+- `/bibel reference:1.Mose 1,1` (Elberfelder by default)
+- `/bible reference:John 3:16 translation:KJV` (specific translation)
+- `/bible-list` (see available English translations)
+- `/bibel-list` (see available German translations)
 
 ---
 
@@ -87,9 +87,10 @@ pip install -r requirements.txt
 ```
 
 ### Tests pass but Discord bot doesn't respond
-1. Check "Message Content Intent" is enabled in Discord Developer Portal
+1. Check `applications.commands` scope is enabled when inviting the bot
 2. Verify bot has permission to read and send messages
 3. Make sure bot is running (check console output)
+4. Wait a few minutes for slash commands to sync on first run
 
 ---
 
@@ -98,10 +99,10 @@ pip install -r requirements.txt
 - [ ] `python test_components.py` - All unit tests pass
 - [ ] `python test_api.py` - API connection works
 - [ ] `python test_manual.py` - Interactive testing works
-- [ ] Discord bot responds to `!bible Gen 1:1`
-- [ ] Discord bot responds to `!bibel 1. Mose 1,1`
-- [ ] Verse ranges work: `!bible Gen 1:1-3`
-- [ ] Translation codes work: `!bible KJV Gen 1:1`
+- [ ] Discord bot responds to `/bible reference:Gen 1:1`
+- [ ] Discord bot responds to `/bibel reference:1.Mose 1,1`
+- [ ] Verse ranges work: `/bible reference:Gen 1:1-3`
+- [ ] Translation codes work: `/bible reference:Gen 1:1 translation:KJV`
 - [ ] Error messages show for invalid references
 
 ---
