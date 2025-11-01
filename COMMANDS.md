@@ -1,18 +1,20 @@
 # Bible Bot Commands
 
-## Basic Commands
+## Discord Slash Commands (Native)
+
+The bot uses Discord's native slash command system for the best user experience!
 
 ### Fetch Verses
 
-#### English (!bible)
+#### English (/bible)
 ```
-!bible Gen 1:1
+/bible reference:Gen 1:1
 ```
 Fetches Genesis 1:1 in English (default: ASV)
 
-#### German (!bibel)
+#### German (/bibel)
 ```
-!bibel 1. Mose 1,1
+/bibel reference:1.Mose 1,1
 ```
 Fetches Genesis 1:1 in German (default: Elberfelder)
 
@@ -22,21 +24,21 @@ Fetches Genesis 1:1 in German (default: Elberfelder)
 
 ### Specify Translation
 ```
-!bible KJV John 3:16
-!bible BSB Rom 8:28
-!bibel LUTHER Römer 8,28
+/bible reference:John 3:16 translation:KJV
+/bible reference:Rom 8:28 translation:BSB
+/bibel reference:Römer 8,28 translation:LUTHER
 ```
 
 ### Verse Ranges
 ```
-!bible Gen 1:1-3
-!bible Matt 5:1-12
-!bibel Johannes 1,1-5
+/bible reference:Gen 1:1-3
+/bible reference:Matt 5:1-12
+/bibel reference:Johannes 1,1-5
 ```
 
 ### Chapter Ranges
 ```
-!bible Matt 5:3-7:12
+/bible reference:Matt 5:3-7:12
 ```
 
 ---
@@ -45,7 +47,7 @@ Fetches Genesis 1:1 in German (default: Elberfelder)
 
 ### List English Translations
 ```
-!bible list
+/bible-list
 ```
 Shows available English Bible translations with their codes.
 
@@ -64,7 +66,7 @@ Shows available English Bible translations with their codes.
 
 ### List German Translations
 ```
-!bibel list
+/bibel-list
 ```
 Shows available German Bible translations with their codes.
 

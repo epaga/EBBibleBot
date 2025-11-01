@@ -22,20 +22,20 @@ if not BIBLE_API_KEY:
     raise ValueError( "BIBLE_API_KEY not found in environment variables" )
 
 
-# Set up Discord client with necessary intents
+# Set up Discord bot with necessary intents
 intents = discord.Intents.default()
 intents.message_content = True  # Required to read message content
-client = discord.Client( intents=intents )
+bot = discord.Bot( intents=intents )
 
 
-@client.event
+@bot.event
 async def on_ready():
     """
     Called when the bot is ready and connected to Discord.
     """
-    print( f'Bot logged in as {client.user}' )
-    print( f'Connected to {len( client.guilds )} server(s)' )
-    print( 'Ready to respond to Bible commands!' )
+    print( f'Bot logged in as {bot.user}' )
+    print( f'Connected to {len( bot.guilds )} server(s)' )
+    print( 'Ready to respond to Bible slash commands!' )
 
 
 def get_translations_list( language='English' ):
@@ -80,84 +80,127 @@ def get_translations_list( language='English' ):
     return "\n".join( lines )
 
 
-@client.event
-async def on_message( message ):
+@bot.slash_command( name="bible", description="Get a Bible verse in English" )
+async def bible_command( 
+    ctx,
+    reference: discord.Option( str, "Bible reference (e.g., Gen 1:1, John 3:16)", required=True ),
+    translation: discord.Option( str, "Translation code (e.g., KJV, ASV, BSB)", required=False, default=None )
+):
     """
-    Called when a message is posted in a channel the bot can see.
+    Slash command to fetch English Bible verses.
     
     Args:
-        message: The Discord message object
+        ctx: Discord context
+        reference: Bible reference string
+        translation: Optional translation code
     """
-    # Ignore messages from the bot itself
-    if message.author == client.user:
-        return
+    await ctx.defer()  # Show "thinking" indicator
     
-    # Check if the message starts with !bible or !bibel
-    if not message.content.startswith( '!bible' ) and not message.content.startswith( '!bibel' ):
-        return
+    # Parse the reference
+    from reference_parser import parse_reference
+    ref = parse_reference( reference )
     
-    content = message.content.strip()
-    
-    # Check for list command
-    if content == '!bible list':
-        async with message.channel.typing():
-            translations_list = get_translations_list( 'English' )
-        await message.channel.send( translations_list )
-        return
-    
-    if content == '!bibel list':
-        async with message.channel.typing():
-            translations_list = get_translations_list( 'German' )
-        await message.channel.send( translations_list )
-        return
-    
-    # Extract command, translation, and reference
-    command, translation, reference = extract_command_and_reference( message.content )
-    
-    if not reference:
-        await message.channel.send(
+    if not ref:
+        await ctx.respond(
             "❌ I couldn't understand that reference. Please use a format like:\n"
-            "`!bible Gen 1:1` or `!bibel 1. Mose 5,14`\n"
-            "You can also specify a translation: `!bible KJV Gen 1:1`\n"
-            "To see available translations: `!bible list` or `!bibel list`"
+            "`Gen 1:1` or `John 3:16` or `Gen 1:1-3`"
         )
         return
     
-    # Show typing indicator while fetching
-    async with message.channel.typing():
-        # Determine if we should use German by default
-        is_german = ( command == 'bibel' )
-        
-        # Fetch the verse
-        result = fetch_verse( BIBLE_API_KEY, reference, translation, is_german )
+    # Fetch the verse
+    result = fetch_verse( BIBLE_API_KEY, ref, translation, is_german=False )
     
     # Send the response
     if result['success']:
-        formatted_ref = format_reference( reference )
+        formatted_ref = format_reference( ref )
         response = f"**{formatted_ref}** ({result['translation']})\n\n{result['text']}"
         
         # Discord has a 2000 character limit
         if len( response ) > 2000:
             response = response[:1997] + "..."
         
-        await message.channel.send( response )
+        await ctx.respond( response )
     else:
-        await message.channel.send( f"❌ {result['error']}" )
+        await ctx.respond( f"❌ {result['error']}" )
 
 
-@client.event
-async def on_error( event, *args, **kwargs ):
+@bot.slash_command( name="bibel", description="Hol dir einen Bibelvers auf Deutsch" )
+async def bibel_command( 
+    ctx,
+    reference: discord.Option( str, "Bibelstelle (z.B., 1. Mose 1,1 oder Johannes 3,16)", required=True ),
+    translation: discord.Option( str, "Übersetzung (z.B., Elberfelder, Luther)", required=False, default=None )
+):
     """
-    Called when an error occurs.
+    Slash command to fetch German Bible verses.
     
     Args:
-        event: The event name
-        args: Event arguments
-        kwargs: Event keyword arguments
+        ctx: Discord context
+        reference: Bible reference string
+        translation: Optional translation code
+    """
+    await ctx.defer()  # Show "thinking" indicator
+    
+    # Parse the reference
+    from reference_parser import parse_reference
+    ref = parse_reference( reference )
+    
+    if not ref:
+        await ctx.respond(
+            "❌ Ich konnte diese Stelle nicht verstehen. Bitte verwende ein Format wie:\n"
+            "`1. Mose 1,1` oder `Johannes 3,16` oder `1. Mose 1,1-3`"
+        )
+        return
+    
+    # Fetch the verse
+    result = fetch_verse( BIBLE_API_KEY, ref, translation, is_german=True )
+    
+    # Send the response
+    if result['success']:
+        formatted_ref = format_reference( ref )
+        response = f"**{formatted_ref}** ({result['translation']})\n\n{result['text']}"
+        
+        # Discord has a 2000 character limit
+        if len( response ) > 2000:
+            response = response[:1997] + "..."
+        
+        await ctx.respond( response )
+    else:
+        await ctx.respond( f"❌ {result['error']}" )
+
+
+@bot.slash_command( name="bible-list", description="List available English Bible translations" )
+async def bible_list_command( ctx ):
+    """
+    Slash command to list available English translations.
+    """
+    await ctx.defer()
+    translations_list = get_translations_list( 'English' )
+    await ctx.respond( translations_list )
+
+
+@bot.slash_command( name="bibel-list", description="Liste verfügbarer deutscher Bibelübersetzungen" )
+async def bibel_list_command( ctx ):
+    """
+    Slash command to list available German translations.
+    """
+    await ctx.defer()
+    translations_list = get_translations_list( 'German' )
+    await ctx.respond( translations_list )
+
+
+@bot.event
+async def on_application_command_error( ctx, error ):
+    """
+    Called when a slash command error occurs.
+    
+    Args:
+        ctx: Discord context
+        error: The error that occurred
     """
     import traceback
-    print( f'Error in {event}:' )
+    print( f'Slash command error:' )
     traceback.print_exc()
+    await ctx.respond( f"❌ An error occurred: {str( error )}" )
 
 
 def main():
@@ -168,7 +211,7 @@ def main():
     print( 'Press Ctrl+C to stop the bot' )
     
     try:
-        client.run( DISCORD_TOKEN )
+        bot.run( DISCORD_TOKEN )
     except KeyboardInterrupt:
         print( '\nBot stopped by user' )
     except Exception as e:

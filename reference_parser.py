@@ -40,8 +40,8 @@ def parse_reference( text ):
     # Pattern to match Bible references
     # Supports: "Book Chapter:Verse" or "Book Chapter,Verse" 
     # With optional ranges: "Book Chapter:Verse-Verse" or "Book Chapter:Verse-Chapter:Verse"
-    # Handles German book names like "1. Mose" or "1 Mose"
-    pattern = r'^((?:\d+\.?\s+)?[A-Za-zäöüÄÖÜß]+(?:\s+[A-Za-zäöüÄÖÜß]+)?)\s+(\d+)[\s:,]+(\d+)(?:[-–](?:(\d+)[\s:,])?(\d+))?'
+    # Handles German book names like "1. Mose", "1 Mose", "1.Mose" (with or without spaces)
+    pattern = r'^((?:\d+\.?\s*)?[A-Za-zäöüÄÖÜß]+(?:\s+[A-Za-zäöüÄÖÜß]+)?)\s+(\d+)[\s:,]+(\d+)(?:[-–](?:(\d+)[\s:,])?(\d+))?'
     
     match = re.match( pattern, text )
     
