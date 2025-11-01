@@ -1,6 +1,6 @@
 # Discord Bible Bot
 
-A Discord bot that responds to Bible verse requests in both English and German, supporting various reference formats and translations.
+A (vibe-coded) Discord bot that responds to Bible verse requests in both English and German, supporting various reference formats and translations.
 
 ## Features
 
